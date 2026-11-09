@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I LOVE YOU</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Segoe UI", "Noto Sans Khmer", "Khmer UI", Arial, sans-serif;
+  }
+  body {
+    background: linear-gradient(135deg, #ff4b6e, #ff9696);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+  }
+  h1 {
+    margin: 0;
+    font-size: 16vw;
+    line-height: 1.1;
+    text-shadow: 0 4px 12px rgba(0,0,0,.25);
+    animation: beat 1.2s infinite;
+  }
+  p {
+    margin: 12px 0 0;
+    font-size: 7vw;
+    text-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  button {
+    margin-top: 30px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff4b6e;
+    background: #fff;
+    border: 0;
+    border-radius: 999px;
+  }
+  @keyframes beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  .heart {
+    position: fixed;
+    bottom: -40px;
+    font-size: 28px;
+    animation: rise linear forwards;
+    pointer-events: none;
+  }
+  @keyframes rise {
+    to { transform: translateY(-115vh); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <h1>I LOVE YOU ❤️</h1>
+  <p>ខ្ញុំស្រលាញ់អ្នក</p>
+  <button id="fs">Full Screen</button>
+
+<script>
+  document.getElementById("fs").addEventListener("click", function () {
+    var el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    this.style.display = "none";
+  });
+
+  setInterval(function () {
+    var h = document.createElement("div");
+    h.className = "heart";
+    h.textContent = "❤️";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.animationDuration = 3 + Math.random() * 3 + "s";
+    document.body.appendChild(h);
+    setTimeout(function () { h.remove(); }, 6500);
+  }, 350);
+</script>
+</body>
+</html>
