@@ -12,13 +12,21 @@
     font-family: "Segoe UI", "Noto Sans Khmer", "Khmer UI", Arial, sans-serif;
   }
   body {
-    background: linear-gradient(135deg, #ff4b6e, #ff9696);
+    background: linear-gradient(135deg, #ff4b6e, #ff9696, #ff6fa5);
+    background-size: 300% 300%;
+    animation: bg 8s ease infinite;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: #fff;
+    -webkit-tap-highlight-color: transparent;
+  }
+  @keyframes bg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
   h1 {
     margin: 0;
@@ -27,13 +35,25 @@
     text-shadow: 0 4px 12px rgba(0,0,0,.25);
     animation: beat 1.2s infinite;
   }
-  p {
+  .kh {
     margin: 12px 0 0;
-    font-size: 7vw;
+    font-size: 8vw;
     text-shadow: 0 2px 8px rgba(0,0,0,.25);
   }
+  #msg {
+    margin: 24px 24px 0;
+    min-height: 2.6em;
+    font-size: 5vw;
+    text-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  .hint {
+    position: fixed;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    font-size: 14px;
+    opacity: .85;
+  }
   button {
-    margin-top: 30px;
+    margin-top: 24px;
     padding: 12px 24px;
     font-size: 18px;
     font-weight: bold;
@@ -49,37 +69,67 @@
   .heart {
     position: fixed;
     bottom: -40px;
-    font-size: 28px;
     animation: rise linear forwards;
     pointer-events: none;
   }
   @keyframes rise {
-    to { transform: translateY(-115vh); opacity: 0; }
+    to { transform: translateY(-115vh) rotate(20deg); opacity: 0; }
   }
 </style>
 </head>
 <body>
   <h1>I LOVE YOU ❤️</h1>
-  <p>ខ្ញុំស្រលាញ់អ្នក</p>
+  <p class="kh">ខ្ញុំស្រលាញ់អ្នក</p>
+  <div id="msg"></div>
   <button id="fs">Full Screen</button>
+  <div class="hint">Tap anywhere 💕</div>
 
 <script>
-  document.getElementById("fs").addEventListener("click", function () {
+  // ✏️ Edit your own messages here
+  var MESSAGES = [
+    "You are the best thing in my life.",
+    "Every day with you is a gift.",
+    "អរគុណដែលនៅក្បែរខ្ញុំជានិច្ច 💖"
+  ];
+
+  var msgEl = document.getElementById("msg");
+  var mi = 0, ci = 0;
+
+  function type() {
+    var text = MESSAGES[mi];
+    if (ci <= text.length) {
+      msgEl.textContent = text.slice(0, ci++);
+      setTimeout(type, 70);
+    } else {
+      setTimeout(function () { ci = 0; mi = (mi + 1) % MESSAGES.length; type(); }, 2200);
+    }
+  }
+  type();
+
+  function spawn(x) {
+    var h = document.createElement("div");
+    h.className = "heart";
+    h.textContent = ["❤️", "💖", "💕", "💗"][Math.floor(Math.random() * 4)];
+    h.style.left = (x !== undefined ? x : Math.random() * window.innerWidth) + "px";
+    h.style.fontSize = 20 + Math.random() * 30 + "px";
+    h.style.animationDuration = 3 + Math.random() * 3 + "s";
+    document.body.appendChild(h);
+    setTimeout(function () { h.remove(); }, 6500);
+  }
+  setInterval(spawn, 350);
+
+  // Tap to burst hearts
+  document.body.addEventListener("click", function (e) {
+    for (var i = 0; i < 6; i++) spawn(e.clientX + (Math.random() * 80 - 40));
+  });
+
+  document.getElementById("fs").addEventListener("click", function (e) {
+    e.stopPropagation();
     var el = document.documentElement;
     if (el.requestFullscreen) el.requestFullscreen();
     else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
     this.style.display = "none";
   });
-
-  setInterval(function () {
-    var h = document.createElement("div");
-    h.className = "heart";
-    h.textContent = "❤️";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.animationDuration = 3 + Math.random() * 3 + "s";
-    document.body.appendChild(h);
-    setTimeout(function () { h.remove(); }, 6500);
-  }, 350);
 </script>
 </body>
 </html>
